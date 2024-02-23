@@ -20,6 +20,7 @@ function HomeScreen() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [landmark, setLandmark] = useState([])
+  const [response, setResponse] = useState("");
 
   function onResults(results) {
     const videoWidth = webcamRef.current.video.videoWidth;
@@ -72,6 +73,9 @@ function HomeScreen() {
       console.log('Disconnected from server');
     });
 
+    socket.on('response', (data) => {
+      setResponse(data);
+    });
 
     const pose = new Pose({
       locateFile: (file) => {
@@ -113,6 +117,9 @@ function HomeScreen() {
   return (
     <center>
       <div className="App">
+        <div>
+          <p>Response from backend: {response}</p>
+        </div>
         <Webcam
           ref={webcamRef}
           style={{
